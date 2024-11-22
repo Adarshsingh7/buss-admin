@@ -12,9 +12,11 @@ interface CustomDialogProps {
   label: string;
   children: React.ReactNode;
   onOpenChange: (el: boolean) => void;
+  width: number;
 }
 
 export function CustomDialog({
+  width,
   dialoagOpen,
   label,
   children,
@@ -22,7 +24,7 @@ export function CustomDialog({
 }: CustomDialogProps) {
   return (
     <Dialog open={dialoagOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:min-w-[425px] max-w-[60vw]">
+      <DialogContent style={{ minWidth: "425px", maxWidth: `${width}vw` }}>
         <DialogHeader>
           <DialogTitle>{label}</DialogTitle>
           <DialogDescription>

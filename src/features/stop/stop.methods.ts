@@ -1,3 +1,4 @@
+import { StopType } from "@/types";
 import axios, { AxiosInstance } from "axios";
 
 class Stop {
@@ -26,13 +27,25 @@ class Stop {
     }
   };
 
+  createStop = async (body: Partial<StopType>) => {
+    body._id = undefined;
+    const response = await this.api.post("/", body);
+    if (response.status === 200) return response.data.data;
+  };
+
+  deleteStop = async (id: string) => {
+    const response = await this.api.delete(`/${id}`);
+    if (response.status === 200) return response.data.data;
+  };
+
   getStops = async (id: number) => {
-    try {
-      const response = await this.api.get(`/${id}`);
-      if (response.status === 200) return response.data.data;
-    } catch (err) {
-      console.log(err);
-    }
+    const response = await this.api.get(`/${id}`);
+    if (response.status === 200) return response.data.data;
+  };
+
+  updateStop = async (body: StopType) => {
+    const response = await this.api.patch(`/${body._id}`, body);
+    if (response.status === 200) return response.data.data;
   };
 
   getToken = () => {

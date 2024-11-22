@@ -12,6 +12,7 @@ import {
   LogOut,
   Compass,
   Waypoints,
+  TramFront,
 } from "lucide-react";
 import { Outlet, NavLink } from "react-router-dom";
 import { WrapperDelete } from "@/components/WrapperDelete";
@@ -37,7 +38,7 @@ export default function DashboardLayout() {
   const tabs = [
     { name: "home", label: "Home" },
     { name: "route", label: "Routes" },
-    { name: "product", label: "Products" },
+    { name: "stop", label: "Stops" },
     { name: "profile", label: "Profile" },
     { name: "account", label: "Account" },
     { name: "map", label: "Maps" },
@@ -84,6 +85,9 @@ export default function DashboardLayout() {
                   {tab.name === "home" && MemoizedHomeIcon}
                   {tab.name === "route" && (
                     <Waypoints className="mr-2 h-4 w-4" />
+                  )}
+                  {tab.name === "stop" && (
+                    <TramFront className="mr-2 h-4 w-4" />
                   )}
                   {tab.name === "profile" && <User className="mr-2 h-4 w-4" />}
                   {tab.name === "account" && <Lock className="mr-2 h-4 w-4" />}

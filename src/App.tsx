@@ -6,7 +6,6 @@ import DashboardLayout from "./pages/DashboardLayout";
 import Account from "./pages/Account";
 import Profile from "./pages/Profile";
 import DashboardPage from "./pages/DashboardPage";
-import Product from "./pages/Product";
 import AuthFormComponent from "./pages/AuthPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Protect from "./components/Protect";
@@ -15,6 +14,7 @@ import Wrapper from "./pages/Wrapper";
 import InteractiveMap from "./pages/InteractiveMap";
 import { useMemo } from "react";
 import RouteManagement from "./features/route/RouteManagement";
+import StopManagement from "./features/stop/StopManagement";
 
 const router = createBrowserRouter([
   {
@@ -56,8 +56,8 @@ const router = createBrowserRouter([
         element: <DashboardPage />,
       },
       {
-        path: "product",
-        element: <Product />,
+        path: "stop",
+        element: <StopManagement />,
       },
       {
         path: "map",
@@ -85,10 +85,7 @@ function App() {
       ) : null,
     [],
   );
-  const routerProvider = useMemo(
-    () => <RouterProvider router={router} />,
-    [router],
-  );
+  const routerProvider = useMemo(() => <RouterProvider router={router} />, []);
 
   return (
     <QueryClientProvider client={queryClient}>

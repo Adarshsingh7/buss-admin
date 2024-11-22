@@ -1,37 +1,24 @@
 import { FC, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDialog } from "@/context/DialogContext";
-import { RouteType } from "@/types";
+import { StopType } from "@/types";
 import { CustomDialog } from "@/components/CustomDialog";
 import RichTable from "@/components/RichTable";
-import { RouteForm } from "@/features/route/RouteForm";
-import { useCreateRoute, useDeleteRoute, useUpdateRoute } from "./route.hook";
+import { StopForm } from "./StopForm";
+import { useCreateStop, useDeleteStop, useUpdateStop } from "./stop.hook";
 
-const RouteManagement: FC = () => {
+const StopManagement: FC = () => {
   const { openDeleteDialog } = useDialog();
 
-  const { data } = useQuery<RouteType[]>({ queryKey: ["route"] });
-
-  const { createRoute } = useCreateRoute();
-  const { updateRoute } = useUpdateRoute();
-  const { deleteRoute } = useDeleteRoute();
+  const { data } = useQuery<StopType[]>({ queryKey: ["stop"] });
+  const { createStop } = useCreateStop();
+  const { updateStop } = useUpdateStop();
+  const { deleteStop } = useDeleteStop();
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [activeEditElement, setActiveEditElement] = useState<RouteType | null>(
+  const [activeEditElement, setActiveEditElement] = useState<StopType | null>(
     null,
   );
-
-  const mapping = [
-    { label: "SNO.", field: "sno" },
-    { label: "ID", field: "id" },
-    { label: "Name", field: "name" },
-    { label: "Status", field: "status" },
-    { label: "Stops", field: "stops" },
-  ];
-
-  const handleDelete = (id: string) => {
-    deleteRoute(id);
-  };
 
   // used to edit the routes
   const handleEdit = (id: string) => {
@@ -47,14 +34,17 @@ const RouteManagement: FC = () => {
   };
 
   // final submit function for the form
-  const handleSubmit = (body: RouteType) => {
+  const handleSubmit = (body: StopType) => {
     if (body._id) {
-      updateRoute(body);
+      updateStop(body);
     } else {
-      createRoute(body);
+      createStop(body);
     }
     setEditDialogOpen(false);
-    setActiveEditElement(null);
+  };
+
+  const handleDelete = (id: string) => {
+    deleteStop(id);
   };
 
   if (!data) return null;
@@ -63,33 +53,28 @@ const RouteManagement: FC = () => {
   const filteredData = data.map((el, i) => ({
     sno: i + 1,
     id: el._id,
-    name: el.routeName,
-    status: el.status,
-    stops: el.stops.length,
+    address: el.address,
+    stopNumber: el.stopNumber,
+    latlng: el.latitude + " | " + el.longitude,
   }));
+
+  const mapping = [
+    { label: "SNO.", field: "sno" },
+    { label: "ID", field: "id" },
+    { label: "Address", field: "address" },
+    { label: "Stop No.", field: "stopNumber" },
+    { label: "Lat/Lng", field: "latlng" },
+  ];
 
   return (
     <div className="flex flex-col gap-10">
       <CustomDialog
-        width={85}
+        width={30}
         dialoagOpen={editDialogOpen}
         label="Edit Routes"
         onOpenChange={setEditDialogOpen}
       >
-        <RouteForm
-          onSubmit={handleSubmit}
-          initialData={
-            activeEditElement
-              ? {
-                  _id: activeEditElement._id,
-                  routeNumber: activeEditElement.routeNumber,
-                  routeName: activeEditElement.routeName,
-                  status: activeEditElement.status,
-                  stops: activeEditElement.stops,
-                }
-              : undefined
-          }
-        />
+        <StopForm initialData={activeEditElement} onSubmit={handleSubmit} />
       </CustomDialog>
       <RichTable
         onAddRecord={handleAddRecord}
@@ -103,4 +88,4 @@ const RouteManagement: FC = () => {
   );
 };
 
-export default RouteManagement;
+export default StopManagement;

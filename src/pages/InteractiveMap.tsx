@@ -37,14 +37,22 @@ const defaultCenter = {
   lng: 0.3319,
 };
 
-export default function InteractiveMap() {
+interface InteractiveMapProps {
+  onAddressChange?: (address: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  }) => void;
+}
+
+export default function InteractiveMap({
+  onAddressChange,
+}: InteractiveMapProps) {
   const { isLoaded, loadError } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
     libraries: ["places"],
   });
-
-  console.log(import.meta.env.VITE_GOOGLE_MAP_API_KEY);
 
   const [center, setCenter] = useState(defaultCenter);
   const [markerPosition, setMarkerPosition] = useState(defaultCenter);
@@ -220,7 +228,13 @@ export default function InteractiveMap() {
     console.log(
       `Added record at: Lat ${markerPosition.lat}, Lng ${markerPosition.lng}, Address: ${address}, Elevation: ${elevation}m`,
     );
-  }, [markerPosition, address, elevation]);
+    if (onAddressChange)
+      onAddressChange({
+        latitude: markerPosition.lat,
+        longitude: markerPosition.lng,
+        address,
+      });
+  }, [markerPosition, address, elevation, onAddressChange]);
 
   const Crosshair = () => (
     <div style={crosshairStyle}>

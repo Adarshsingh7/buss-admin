@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import {
   ChevronDown,
@@ -48,7 +46,7 @@ const RichTable = function ({
   onDelete,
   label,
 }: RichTableProps) {
-  const data = initialData;
+  const [data, setData] = useState(initialData);
 
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
@@ -60,13 +58,16 @@ const RichTable = function ({
   const [filteredData, setFilteredData] = useState(data);
 
   useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
+
+  useEffect(() => {
     const filtered = data.filter((item) =>
       Object.values(item).some((val) =>
         String(val).toLowerCase().includes(searchTerm.toLowerCase()),
       ),
     );
     setFilteredData(filtered);
-    setCurrentPage(1);
   }, [data, searchTerm]);
 
   const handleSort = (column: string) => {
