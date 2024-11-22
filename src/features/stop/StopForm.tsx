@@ -20,8 +20,8 @@ export function StopForm({ initialData, onSubmit }: StopFormProps) {
       _id: "",
       latitude: 0,
       longitude: 0,
+      name: "",
       address: "",
-      stopNumber: 1,
     },
   );
 
@@ -32,7 +32,7 @@ export function StopForm({ initialData, onSubmit }: StopFormProps) {
   }) {
     setFormData({
       _id: formData._id,
-      stopNumber: formData.stopNumber,
+      name: formData.name,
       address: body.address,
       latitude: body.latitude,
       longitude: body.longitude,
@@ -53,9 +53,7 @@ export function StopForm({ initialData, onSubmit }: StopFormProps) {
     setFormData((prevData) => ({
       ...prevData,
       [name]:
-        name === "latitude" || name === "longitude" || name === "stopNumber"
-          ? parseFloat(value)
-          : value,
+        name === "latitude" || name === "longitude" ? parseFloat(value) : value,
     }));
   }
 
@@ -67,7 +65,12 @@ export function StopForm({ initialData, onSubmit }: StopFormProps) {
         onOpenChange={setIsFetching}
         width={90}
       >
-        <InteractiveMap onAddressChange={handleFetchFromMap} />
+        <InteractiveMap
+          onAddressChange={handleFetchFromMap}
+          lat={initialData?.latitude}
+          lng={initialData?.longitude}
+          address={initialData?.address}
+        />
       </CustomDialog>
       <CardHeader>
         <CardTitle>{initialData ? "Edit Stop" : "Create New Stop"}</CardTitle>
@@ -91,6 +94,7 @@ export function StopForm({ initialData, onSubmit }: StopFormProps) {
                   type="number"
                   step="any"
                   name="latitude"
+                  autoComplete="off"
                   placeholder="Latitude"
                   value={formData.latitude}
                   onChange={handleChange}
@@ -106,6 +110,7 @@ export function StopForm({ initialData, onSubmit }: StopFormProps) {
                   type="number"
                   step="any"
                   name="longitude"
+                  autoComplete="off"
                   placeholder="Longitude"
                   value={formData.longitude}
                   onChange={handleChange}
@@ -115,18 +120,33 @@ export function StopForm({ initialData, onSubmit }: StopFormProps) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
+              Name
+            </label>
+            <div className="mt-1">
+              <Input
+                name="name"
+                autoComplete="off"
+                placeholder="Enter Name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
               Address
             </label>
             <div className="mt-1">
               <Input
                 name="address"
+                autoComplete="off"
                 placeholder="Enter address"
                 value={formData.address}
                 onChange={handleChange}
               />
             </div>
           </div>
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700">
               Stop Number
             </label>
@@ -139,7 +159,7 @@ export function StopForm({ initialData, onSubmit }: StopFormProps) {
                 onChange={handleChange}
               />
             </div>
-          </div>
+          </div> */}
           <Button type="submit" className="w-full">
             {initialData ? "Update Stop" : "Create Stop"}
           </Button>

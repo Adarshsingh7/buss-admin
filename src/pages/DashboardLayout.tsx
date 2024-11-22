@@ -21,18 +21,20 @@ import { useHandleLogout, useIsAuthenticated } from "@/features/authHooks";
 import { useQuery } from "@tanstack/react-query";
 import { stop } from "@/features/stop/stop.methods";
 import { route } from "@/features/route/route.methods";
+import { UserType } from "@/types";
 
 export default function DashboardLayout() {
   useIsAuthenticated();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const logout = useHandleLogout();
+  const { data: user } = useQuery<UserType>({ queryKey: ["user"] });
   const { isLoading: loadingStop } = useQuery({
     queryKey: ["stop"],
-    queryFn: stop.getAllStops,
+    queryFn: () => stop.getAllStops(user?._id || ""),
   });
   const { isLoading: loadingRoute } = useQuery({
     queryKey: ["route"],
-    queryFn: route.getAllRoutes,
+    queryFn: () => route.getAllRoutes(user?._id || ""),
   });
 
   const tabs = [

@@ -1,4 +1,5 @@
 interface UserType {
+  _id: string;
   name: string;
   email: string;
   phone: string;
@@ -36,14 +37,16 @@ interface RouteType {
   routeName: string;
   stops: string[]; // Stops are now objects with a 'value' field
   status: "arrival" | "return";
+  user?: string;
 }
 
 interface StopType {
   _id: string;
+  name: string;
   latitude: number;
   longitude: number;
   address: string;
-  stopNumber: number;
+  user?: string;
 }
 
 export { LocationType, RouteType, StopType, UserType };

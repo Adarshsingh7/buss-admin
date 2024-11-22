@@ -39,11 +39,11 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { TooltipWrapper } from "@/components/TooltipWrapper";
 
 export default function DashboardPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
 
   // Sample data for charts and tables
   const revenueData = [
@@ -71,21 +71,15 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className={`p-4 space-y-6 ${darkMode ? "dark" : ""}`}>
+    <div className={`p-4 space-y-6 `}>
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="dark-mode"
-              checked={darkMode}
-              onCheckedChange={setDarkMode}
-            />
-            <Label htmlFor="dark-mode">Dark Mode</Label>
-          </div>
-          <Button variant="outline" size="icon">
-            <Settings className="h-4 w-4" />
-          </Button>
+          <TooltipWrapper message="Bhai kaise setting me jana hai ab">
+            <Button variant="outline" size="icon">
+              <Settings className="h-4 w-4" />
+            </Button>
+          </TooltipWrapper>
         </div>
       </div>
 
@@ -353,7 +347,7 @@ const TimeAndLocation = () => {
   }, []);
 
   return (
-    <div className="flex-1 bg-zinc-900 rounded-lg">
+    <div className="flex-1 bg-[#09090B] rounded-lg">
       <div className="text-white text-center p-4">
         <p className="text-lg font-bold">{time.toLocaleTimeString()}</p>
         <p className="text-sm">India</p>

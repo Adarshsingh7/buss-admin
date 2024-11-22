@@ -19,8 +19,8 @@ class Route {
     this.getToken = this.getToken.bind(this);
   }
 
-  getAllRoutes = async () => {
-    const response = await this.api.get("?sort=routeNumber");
+  getAllRoutes = async (id: string) => {
+    const response = await this.api.get(`?sort=routeNumber&user=${id}`);
     if (response.status === 200) return response.data.data;
   };
 

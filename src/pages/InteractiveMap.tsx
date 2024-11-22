@@ -32,34 +32,41 @@ const crosshairStyle = {
   zIndex: 1001,
 };
 
-const defaultCenter = {
-  lat: 6.4499,
-  lng: 0.3319,
-};
+interface AddressType {
+  latitude: number;
+  longitude: number;
+  address: string;
+}
 
 interface InteractiveMapProps {
-  onAddressChange?: (address: {
-    latitude: number;
-    longitude: number;
-    address: string;
-  }) => void;
+  onAddressChange?: (address: AddressType) => void;
+  lat?: number;
+  lng?: number;
+  address?: string;
 }
 
 export default function InteractiveMap({
   onAddressChange,
+  lat,
+  lng,
+  address: initialAddress,
 }: InteractiveMapProps) {
   const { isLoaded, loadError } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
     libraries: ["places"],
   });
+  const defaultCenter = {
+    lat: lat ?? 0,
+    lng: lng ?? 0,
+  };
 
   const [center, setCenter] = useState(defaultCenter);
   const [markerPosition, setMarkerPosition] = useState(defaultCenter);
   const [inputLat, setInputLat] = useState(defaultCenter.lat.toString());
   const [inputLng, setInputLng] = useState(defaultCenter.lng.toString());
   const [searchQuery, setSearchQuery] = useState("");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(initialAddress || "");
   const [elevation, setElevation] = useState<number | null>(null);
   const [isMapDragging, setIsMapDragging] = useState(false);
   const [customMarkerIcon, setCustomMarkerIcon] =
@@ -289,15 +296,22 @@ export default function InteractiveMap({
             Go
           </Button>
         </div>
-        <div className="flex space-x-2">
-          <Input
-            id="search-box"
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search location"
-          />
-        </div>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            console.log("form submitted");
+          }}
+        >
+          <div className="flex space-x-2">
+            <Input
+              id="search-box"
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search location"
+            />
+          </div>
+        </form>
         <div style={mapContainerStyle}>
           <GoogleMap
             mapContainerStyle={{ width: "100%", height: "100%" }}

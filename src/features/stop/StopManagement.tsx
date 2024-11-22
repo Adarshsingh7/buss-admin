@@ -53,17 +53,18 @@ const StopManagement: FC = () => {
   const filteredData = data.map((el, i) => ({
     sno: i + 1,
     id: el._id,
-    address: el.address,
-    stopNumber: el.stopNumber,
-    latlng: el.latitude + " | " + el.longitude,
+    address: el.address.slice(0, 40) + (el.address.length > 40 ? "..." : ""),
+    lat: el.latitude.toFixed(5),
+    lng: el.longitude.toFixed(5),
+    name: el.name,
   }));
 
   const mapping = [
     { label: "SNO.", field: "sno" },
-    { label: "ID", field: "id" },
+    { label: "Lat", field: "lat" },
+    { label: "Lng", field: "lng" },
+    { label: "Name", field: "name" },
     { label: "Address", field: "address" },
-    { label: "Stop No.", field: "stopNumber" },
-    { label: "Lat/Lng", field: "latlng" },
   ];
 
   return (

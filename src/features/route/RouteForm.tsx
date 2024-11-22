@@ -144,7 +144,7 @@ export function RouteForm({ initialData, onSubmit }: RouteFormProps) {
                   className="flex items-center justify-between p-2 bg-zinc-100 rounded-md dark:bg-zinc-800"
                 >
                   <span>
-                    {stops?.find((stop) => stop._id === stopId)?.address}
+                    {stops?.find((stop) => stop._id === stopId)?.name}
                   </span>
                   <div className="flex items-center space-x-2">
                     {index > 0 && (
@@ -180,7 +180,7 @@ export function RouteForm({ initialData, onSubmit }: RouteFormProps) {
                   ?.filter((stop) => !totalStops.includes(stop._id))
                   .map((stop) => (
                     <SelectItem key={stop._id} value={stop._id}>
-                      {stop.address}
+                      {stop.name}
                     </SelectItem>
                   ))}
               </SelectContent>

@@ -18,13 +18,9 @@ class Stop {
     this.getToken = this.getToken.bind(this);
   }
 
-  getAllStops = async () => {
-    try {
-      const response = await this.api.get("/");
-      if (response.status === 200) return response.data.data;
-    } catch (err) {
-      console.log(err);
-    }
+  getAllStops = async (id: string) => {
+    const response = await this.api.get(`?user=${id}`);
+    if (response.status === 200) return response.data.data;
   };
 
   createStop = async (body: Partial<StopType>) => {
