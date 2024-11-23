@@ -77,6 +77,7 @@ export default function InteractiveMap({
   const searchBoxRef = useRef<google.maps.places.SearchBox | null>(null);
 
   useEffect(() => {
+    if (lat && lng) return;
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -88,13 +89,14 @@ export default function InteractiveMap({
           setMarkerPosition(userLocation);
           setInputLat(userLocation.lat.toFixed(6));
           setInputLng(userLocation.lng.toFixed(6));
+          updateAddressAndElevation(userLocation);
         },
         () => {
           console.log("Unable to retrieve your location");
         },
       );
     }
-  }, []);
+  }, [lat, lng]);
 
   useEffect(() => {
     if (isLoaded) {
@@ -231,17 +233,35 @@ export default function InteractiveMap({
     );
   };
 
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (searchBoxRef.current) {
+      const places = searchBoxRef.current.getPlaces();
+      if (places && places.length > 0) {
+        const place = places[0];
+        if (place.geometry && place.geometry.location) {
+          const newPosition = {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
+          };
+          setMarkerPosition(newPosition);
+          setInputLat(newPosition.lat.toFixed(6));
+          setInputLng(newPosition.lng.toFixed(6));
+          mapRef.current?.panTo(newPosition);
+          updateAddressAndElevation(newPosition);
+        }
+      }
+    }
+  };
+
   const handleAddRecord = useCallback(() => {
-    console.log(
-      `Added record at: Lat ${markerPosition.lat}, Lng ${markerPosition.lng}, Address: ${address}, Elevation: ${elevation}m`,
-    );
     if (onAddressChange)
       onAddressChange({
         latitude: markerPosition.lat,
         longitude: markerPosition.lng,
         address,
       });
-  }, [markerPosition, address, elevation, onAddressChange]);
+  }, [markerPosition, address, onAddressChange]);
 
   const Crosshair = () => (
     <div style={crosshairStyle}>
@@ -296,20 +316,19 @@ export default function InteractiveMap({
             Go
           </Button>
         </div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log("form submitted");
-          }}
-        >
+        <form onSubmit={handleSearchSubmit}>
           <div className="flex space-x-2">
             <Input
               id="search-box"
               type="text"
               value={searchQuery}
+              autoComplete="off"
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search location"
             />
+            <Button type="submit" size="sm" className="px-6">
+              Search
+            </Button>
           </div>
         </form>
         <div style={mapContainerStyle}>
@@ -342,7 +361,7 @@ export default function InteractiveMap({
                     disableDoubleClickZoom: true,
                   }}
                 >
-                  {customMarkerIcon && (
+                  {/* {customMarkerIcon && (
                     <Marker
                       position={markerPosition}
                       icon={{
@@ -352,7 +371,7 @@ export default function InteractiveMap({
                           : 1,
                       }}
                     />
-                  )}
+                  )} */}
                   <Crosshair />
                 </GoogleMap>
               </div>
