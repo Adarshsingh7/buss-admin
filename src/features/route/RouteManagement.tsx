@@ -48,6 +48,7 @@ const RouteManagement: FC = () => {
 
   // final submit function for the form
   const handleSubmit = (body: RouteType) => {
+    console.log(body);
     if (body._id) {
       updateRoute(body);
     } else {

@@ -1,3 +1,5 @@
+/** @format */
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { auth } from "./authMethods";
 import { toast } from "sonner";
@@ -16,7 +18,7 @@ interface Error {
 // Hook for checking if the user is authenticated
 const useIsAuthenticated = () => {
   const { data, refetch, isPending, isError } = useQuery<User>({
-    queryKey: ["user"],
+    queryKey: ["auth"],
     queryFn: () => auth.isAuthenticated(),
     retry: false,
   });
@@ -38,7 +40,7 @@ const useHandleLogin = () => {
       toast.dismiss("login");
       toast.success("Logged in successfully");
       refetch();
-      queryClient.invalidateQueries({ queryKey: ["user"] }); // Refresh the authentication query
+      queryClient.invalidateQueries({ queryKey: ["auth"] }); // Refresh the authentication query
     },
     onError: (error: Error) => {
       toast.dismiss("login");
@@ -58,7 +60,7 @@ const useHandleLogout = () => {
     mutationFn: () => auth.logout(),
     onSuccess: () => {
       toast.success("Logged out successfully");
-      queryClient.removeQueries({ queryKey: ["user"] });
+      queryClient.removeQueries({ queryKey: ["auth"] });
       navigate("/");
     },
     onError: (error: Error) => {

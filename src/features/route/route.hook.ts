@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 export const useUpdateRoute = function () {
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationFn: (body: RouteType) => route.updateRoute(body),
+    mutationFn: (body: RouteType) => route.updateRoute(body._id, body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["route"] });
       toast.success("Route updated successfully");
@@ -47,7 +47,7 @@ export const useCreateRoute = function () {
 export const useDeleteRoute = function () {
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationFn: (id: string) => route.deleteRoute(id),
+    mutationFn: (id: string) => route.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["route"] });
       toast.success("Route deleted successfully");

@@ -15,6 +15,7 @@ import InteractiveMap from "./pages/InteractiveMap";
 import { useMemo } from "react";
 import RouteManagement from "./features/route/RouteManagement";
 import StopManagement from "./features/stop/StopManagement";
+import UserManagement from "./features/user/UserManagement";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "home",
         element: <DashboardPage />,
+      },
+      {
+        path: "user",
+        element: <UserManagement />,
       },
       {
         path: "stop",

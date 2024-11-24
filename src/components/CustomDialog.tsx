@@ -24,7 +24,14 @@ export function CustomDialog({
 }: CustomDialogProps) {
   return (
     <Dialog open={dialoagOpen} onOpenChange={onOpenChange}>
-      <DialogContent style={{ minWidth: "425px", maxWidth: `${width}vw` }}>
+      <DialogContent
+        style={{
+          minWidth: "425px",
+          maxWidth: `${width}vw`,
+          maxHeight: "90vh",
+          overflow: "auto",
+        }}
+      >
         <DialogHeader>
           <DialogTitle>{label}</DialogTitle>
           <DialogDescription>

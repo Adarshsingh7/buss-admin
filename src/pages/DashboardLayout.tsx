@@ -13,6 +13,7 @@ import {
   Compass,
   Waypoints,
   TramFront,
+  UserRoundCog,
 } from "lucide-react";
 import { Outlet, NavLink } from "react-router-dom";
 import { WrapperDelete } from "@/components/WrapperDelete";
@@ -22,25 +23,31 @@ import { useQuery } from "@tanstack/react-query";
 import { stop } from "@/features/stop/stop.methods";
 import { route } from "@/features/route/route.methods";
 import { UserType } from "@/types";
+import { userService } from "@/features/user/user.methods";
 
 export default function DashboardLayout() {
   useIsAuthenticated();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const logout = useHandleLogout();
-  const { data: user } = useQuery<UserType>({ queryKey: ["user"] });
+  const { data: user } = useQuery<UserType>({ queryKey: ["auth"] });
   const { isLoading: loadingStop } = useQuery({
     queryKey: ["stop"],
     queryFn: () => stop.getAllStops(user?._id || ""),
   });
+  const { isLoading: loadingUsers } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => userService.getAllUsers(),
+  });
   const { isLoading: loadingRoute } = useQuery({
     queryKey: ["route"],
-    queryFn: () => route.getAllRoutes(user?._id || ""),
+    queryFn: () => route.getAllRoutes({ user: user?._id }),
   });
 
   const tabs = [
     { name: "home", label: "Home" },
     { name: "route", label: "Routes" },
     { name: "stop", label: "Stops" },
+    { name: "user", label: "Users" },
     { name: "profile", label: "Profile" },
     { name: "account", label: "Account" },
     { name: "map", label: "Maps" },
@@ -56,7 +63,7 @@ export default function DashboardLayout() {
   );
   const MemoizedHomeIcon = useMemo(() => <Home className="mr-2 h-4 w-4" />, []);
 
-  if (loadingStop || loadingRoute) return <div>Loading...</div>;
+  if (loadingStop || loadingRoute || loadingUsers) return <div>Loading...</div>;
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -90,6 +97,9 @@ export default function DashboardLayout() {
                   )}
                   {tab.name === "stop" && (
                     <TramFront className="mr-2 h-4 w-4" />
+                  )}
+                  {tab.name === "user" && (
+                    <UserRoundCog className="mr-2 h-4 w-4" />
                   )}
                   {tab.name === "profile" && <User className="mr-2 h-4 w-4" />}
                   {tab.name === "account" && <Lock className="mr-2 h-4 w-4" />}

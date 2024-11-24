@@ -18,15 +18,18 @@ class Auth {
     this.getToken = this.getToken.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
   }
-  login = async (data: { email: string; password: string }) => {
-    try {
-      const response = await this.api.post("/login", data);
-      if (response.status === 200) this.setToken(response.data.token);
-      return response.data.user;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+
+  login = async (body: { email: string; password: string }) => {
+    const response = await this.api.post("/login", body);
+    console.log(response.data);
+    this.setToken(response.data.token);
+    return response.data.user;
+  };
+
+  getAllUser = async () => {
+    const response = await this.api.post("/");
+    if (response.status === 200) this.setToken(response.data.token);
+    return response.data.user;
   };
 
   signup = async (data: {
@@ -34,13 +37,8 @@ class Auth {
     password: string;
     confirmPassword: string;
   }): Promise<UserType> => {
-    try {
-      const response = await this.api.post<{ user: UserType }>("/signup", data);
-      return response.data.user;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const response = await this.api.post<{ user: UserType }>("/signup", data);
+    return response.data.user;
   };
 
   isAuthenticated = async () => {

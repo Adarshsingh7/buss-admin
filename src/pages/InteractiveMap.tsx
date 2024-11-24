@@ -65,7 +65,7 @@ export default function InteractiveMap({
   const [markerPosition, setMarkerPosition] = useState(defaultCenter);
   const [inputLat, setInputLat] = useState(defaultCenter.lat.toString());
   const [inputLng, setInputLng] = useState(defaultCenter.lng.toString());
-  const [searchQuery, setSearchQuery] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
   const [address, setAddress] = useState(initialAddress || "");
   const [elevation, setElevation] = useState<number | null>(null);
   const [isMapDragging, setIsMapDragging] = useState(false);
@@ -210,7 +210,7 @@ export default function InteractiveMap({
         }
       });
     }
-  }, [isLoaded]);
+  }, [isLoaded, mapRef.current]);
 
   const updateAddressAndElevation = (position: google.maps.LatLngLiteral) => {
     const geocoder = new window.google.maps.Geocoder();
@@ -321,9 +321,9 @@ export default function InteractiveMap({
             <Input
               id="search-box"
               type="text"
-              value={searchQuery}
+              // value={searchQuery}
               autoComplete="off"
-              onChange={(e) => setSearchQuery(e.target.value)}
+              // onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search location"
             />
             <Button type="submit" size="sm" className="px-6">

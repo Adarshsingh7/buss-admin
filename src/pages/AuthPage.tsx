@@ -36,7 +36,7 @@ export default function AuthPage() {
   const { login } = useHandleLogin();
   // const { user, isPending: loadingAuthenticatedStatus } = useIsAuthenticated();
   const { data: user, isLoading: loadingAuthenticatedStatus } = useQuery({
-    queryKey: ["user"],
+    queryKey: ["auth"],
   });
 
   const [showPassword, setShowPassword] = useState(false);

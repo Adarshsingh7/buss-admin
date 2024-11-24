@@ -1,5 +1,3 @@
-/** @format */
-
 import { useQuery } from "@tanstack/react-query";
 import { FC, PropsWithChildren, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +9,7 @@ const Protect: FC<PropsWithChildren> = ({ children }) => {
     isPending: loadingAuthStatus,
     isError,
   } = useQuery({
-    queryKey: ["user"],
+    queryKey: ["auth"],
   });
 
   const navigate = useNavigate();
