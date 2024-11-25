@@ -30,15 +30,15 @@ export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const logout = useHandleLogout();
   const { data: user } = useQuery<UserType>({ queryKey: ["auth"] });
-  const { isLoading: loadingStop } = useQuery({
+  useQuery({
     queryKey: ["stop"],
     queryFn: () => stop.getAllStops(user?._id || ""),
   });
-  const { isLoading: loadingUsers } = useQuery({
+  useQuery({
     queryKey: ["user"],
     queryFn: () => userService.getAllUsers(),
   });
-  const { isLoading: loadingRoute } = useQuery({
+  useQuery({
     queryKey: ["route"],
     queryFn: () => route.getAllRoutes({ user: user?._id }),
   });
@@ -62,8 +62,6 @@ export default function DashboardLayout() {
     [],
   );
   const MemoizedHomeIcon = useMemo(() => <Home className="mr-2 h-4 w-4" />, []);
-
-  if (loadingStop || loadingRoute || loadingUsers) return <div>Loading...</div>;
 
   return (
     <div className="flex h-screen bg-gray-100">

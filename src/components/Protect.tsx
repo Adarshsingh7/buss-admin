@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FC, PropsWithChildren, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { BackdropLoader } from "./BackdropLoader";
 
 const Protect: FC<PropsWithChildren> = ({ children }) => {
   const {
@@ -23,7 +24,8 @@ const Protect: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [navigate, user, loadingAuthStatus, isError]);
 
-  if (loadingAuthStatus) return null;
+  if (loadingAuthStatus)
+    return <BackdropLoader isLoading={loadingAuthStatus} />;
 
   return <>{children}</>;
 };

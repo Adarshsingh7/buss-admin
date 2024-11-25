@@ -6,12 +6,15 @@ import { CustomDialog } from "@/components/CustomDialog";
 import RichTable from "@/components/RichTable";
 import { UserForm } from "./UserForm";
 import { useCreteUser, useDeleteUser, useUpdateUser } from "./user.hook";
+import { BackdropLoader } from "@/components/BackdropLoader";
 // import { useCreateRoute, useDeleteRoute, useUpdateRoute } from "./route.hook";
 
 const UserManagement: FC = () => {
   const { openDeleteDialog } = useDialog();
 
-  const { data: users } = useQuery<UserType[]>({ queryKey: ["user"] });
+  const { data: users, isLoading } = useQuery<UserType[]>({
+    queryKey: ["user"],
+  });
   const { createUser } = useCreteUser();
   const { updateUser } = useUpdateUser();
   const { deleteUser } = useDeleteUser();
@@ -70,6 +73,8 @@ const UserManagement: FC = () => {
     { label: "Role", field: "role" },
     { label: "Phone", field: "phone" },
   ];
+
+  if (isLoading) return <BackdropLoader isLoading={isLoading} />;
 
   return (
     <div className="flex flex-col gap-10">

@@ -6,11 +6,12 @@ import { CustomDialog } from "@/components/CustomDialog";
 import RichTable from "@/components/RichTable";
 import { StopForm } from "./StopForm";
 import { useCreateStop, useDeleteStop, useUpdateStop } from "./stop.hook";
+import { BackdropLoader } from "@/components/BackdropLoader";
 
 const StopManagement: FC = () => {
   const { openDeleteDialog } = useDialog();
 
-  const { data } = useQuery<StopType[]>({ queryKey: ["stop"] });
+  const { data, isLoading } = useQuery<StopType[]>({ queryKey: ["stop"] });
   const { createStop } = useCreateStop();
   const { updateStop } = useUpdateStop();
   const { deleteStop } = useDeleteStop();
@@ -66,6 +67,8 @@ const StopManagement: FC = () => {
     { label: "Name", field: "name" },
     { label: "Address", field: "address" },
   ];
+
+  if (isLoading) return <BackdropLoader isLoading={isLoading} />;
 
   return (
     <div className="flex flex-col gap-10">

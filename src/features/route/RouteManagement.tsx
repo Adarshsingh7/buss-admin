@@ -6,11 +6,12 @@ import { CustomDialog } from "@/components/CustomDialog";
 import RichTable from "@/components/RichTable";
 import { RouteForm } from "@/features/route/RouteForm";
 import { useCreateRoute, useDeleteRoute, useUpdateRoute } from "./route.hook";
+import { BackdropLoader } from "@/components/BackdropLoader";
 
 const RouteManagement: FC = () => {
   const { openDeleteDialog } = useDialog();
 
-  const { data } = useQuery<RouteType[]>({ queryKey: ["route"] });
+  const { data, isLoading } = useQuery<RouteType[]>({ queryKey: ["route"] });
 
   const { createRoute } = useCreateRoute();
   const { updateRoute } = useUpdateRoute();
@@ -68,6 +69,8 @@ const RouteManagement: FC = () => {
     status: el.status,
     stops: el.stops.length,
   }));
+
+  if (isLoading) return <BackdropLoader isLoading={isLoading} />;
 
   return (
     <div className="flex flex-col gap-10">
