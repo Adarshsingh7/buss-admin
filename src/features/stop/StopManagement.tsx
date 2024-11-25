@@ -48,6 +48,7 @@ const StopManagement: FC = () => {
     deleteStop(id);
   };
 
+  if (isLoading) return <BackdropLoader isLoading={isLoading} />;
   if (!data) return null;
 
   // this is used to filter the record to show in the table
@@ -67,8 +68,6 @@ const StopManagement: FC = () => {
     { label: "Name", field: "name" },
     { label: "Address", field: "address" },
   ];
-
-  if (isLoading) return <BackdropLoader isLoading={isLoading} />;
 
   return (
     <div className="flex flex-col gap-10">

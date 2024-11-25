@@ -54,7 +54,7 @@ const UserManagement: FC = () => {
     }
   };
 
-  if (!users) return null;
+  if (!users) return <BackdropLoader isLoading={isLoading} />;
 
   // this is used to filter the record to show in the table
   const filteredData = users.map((el, i) => ({
@@ -84,7 +84,11 @@ const UserManagement: FC = () => {
         label="Edit Routes"
         onOpenChange={setEditDialogOpen}
       >
-        <UserForm initialData={activeEditElement} onSubmit={handleSubmit} />
+        <UserForm
+          defaultValues={activeEditElement}
+          onSubmit={handleSubmit}
+          isUpdateMode={true}
+        />
       </CustomDialog>
       <RichTable
         onAddRecord={handleAddRecord}
