@@ -148,14 +148,12 @@ export function RouteForm({ initialData, onSubmit }: RouteFormProps) {
                   </span>
                   <div className="flex items-center space-x-2">
                     {index > 0 && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
+                      <span
                         onClick={() => handleSwapStops(index, index - 1)}
-                        className="h-8 w-8"
+                        className="h-8 w-8 cursor-pointer"
                       >
                         <ArrowUpDown className="h-4 w-4" />
-                      </Button>
+                      </span>
                     )}
                     <Button
                       variant="ghost"
