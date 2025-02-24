@@ -157,7 +157,7 @@ export function UserForm({ defaultValues, onSubmit }: UserFormTypes) {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="student">Student</SelectItem>
-                        <SelectItem value="drvier">Driver</SelectItem>
+                        <SelectItem value="driver">Driver</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
