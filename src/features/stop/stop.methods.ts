@@ -18,8 +18,8 @@ class Stop {
     this.getToken = this.getToken.bind(this);
   }
 
-  getAllStops = async (id: string) => {
-    const response = await this.api.get(`?user=${id}`);
+  getAllStops = async (id: string | null) => {
+    const response = await this.api.get(id ? "" : `?user=${id}`);
     if (response.status === 200) return response.data.data;
   };
 
