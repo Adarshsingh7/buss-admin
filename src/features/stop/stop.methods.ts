@@ -19,7 +19,7 @@ class Stop {
   }
 
   getAllStops = async (id: string | null) => {
-    const response = await this.api.get(id ? "" : `?user=${id}`);
+    const response = await this.api.get(`?user=${id}`);
     if (response.status === 200) return response.data.data;
   };
 

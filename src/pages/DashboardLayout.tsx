@@ -23,6 +23,7 @@ import { useQuery } from "@tanstack/react-query";
 import { stop } from "@/features/stop/stop.methods";
 import { route } from "@/features/route/route.methods";
 import { UserType } from "@/types";
+import { schoolService } from "@/features/school/school.methods";
 import { userService } from "@/features/user/user.methods";
 
 export default function DashboardLayout() {
@@ -40,7 +41,11 @@ export default function DashboardLayout() {
   });
   useQuery({
     queryKey: ["route"],
-    queryFn: () => route.getAllRoutes({ user: user?._id }),
+    queryFn: () => route.getAllRoutes({ user: user?._id || "" }),
+  });
+  useQuery({
+    queryKey: ["school"],
+    queryFn: () => schoolService.getAllSchools({ user: user?._id || "" }),
   });
 
   const tabs = [

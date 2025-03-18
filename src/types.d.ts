@@ -49,4 +49,15 @@ interface StopType {
   user?: string;
 }
 
-export { LocationType, RouteType, StopType, UserType };
+interface SchoolType {
+  _id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  logo: string;
+  schoolCode: string;
+  isActive?: boolean;
+}
+
+export { LocationType, RouteType, StopType, SchoolType, UserType };
