@@ -95,7 +95,7 @@ const UserManagement: FC = () => {
         initialData={filteredData}
         mapping={mapping}
         onDelete={(id) => openDeleteDialog(() => handleDelete(id))}
-        label="Employee List"
+        label="User List"
         onEdit={handleEdit}
       />
     </div>

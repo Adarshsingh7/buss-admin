@@ -100,7 +100,7 @@ const RouteManagement: FC = () => {
         initialData={filteredData}
         mapping={mapping}
         onDelete={(id) => openDeleteDialog(() => handleDelete(id))}
-        label="Employee List"
+        label="Route List"
         onEdit={handleEdit}
       />
     </div>

@@ -15,7 +15,6 @@ import { BackdropLoader } from "@/components/BackdropLoader";
 
 const SchoolManagement: FC = () => {
   const { openDeleteDialog } = useDialog();
-
   const { data, isLoading } = useQuery<SchoolType[]>({ queryKey: ["school"] });
   const { createSchool } = useCreateSchool();
   const { updateSchool } = useUpdateSchool();
@@ -70,11 +69,11 @@ const SchoolManagement: FC = () => {
 
   const mapping = [
     { label: "SNO.", field: "sno" },
+    { label: "Name", field: "name" },
+    { label: "School Code", field: "schoolCode" },
     // { label: "Phone", field: "phone" },
     // { label: "Email", field: "email" },
     { label: "Logo", field: "logo" },
-    { label: "Name", field: "name" },
-    { label: "School Code", field: "schoolCode" },
     { label: "Address", field: "address" },
   ];
 
@@ -93,7 +92,7 @@ const SchoolManagement: FC = () => {
         initialData={filteredData}
         mapping={mapping}
         onDelete={(id) => openDeleteDialog(() => handleDelete(id))}
-        label="Employee List"
+        label="School List"
         onEdit={handleEdit}
       />
     </div>

@@ -84,7 +84,7 @@ const StopManagement: FC = () => {
         initialData={filteredData}
         mapping={mapping}
         onDelete={(id) => openDeleteDialog(() => handleDelete(id))}
-        label="Employee List"
+        label="Stop List"
         onEdit={handleEdit}
       />
     </div>

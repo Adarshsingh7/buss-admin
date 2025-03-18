@@ -45,14 +45,19 @@ export default function DashboardLayout() {
   });
   useQuery({
     queryKey: ["school"],
-    queryFn: () => schoolService.getAllSchools({ user: user?._id || "" }),
+    queryFn: () =>
+      schoolService.getAllSchools(
+        user?.role === "super-admin" ? {} : { user: user?._id || "" },
+      ),
   });
 
+  console.log(user);
   const tabs = [
     { name: "home", label: "Home" },
     { name: "route", label: "Routes" },
     { name: "stop", label: "Stops" },
     { name: "user", label: "Users" },
+    { name: "school", label: "School" },
     { name: "profile", label: "Profile" },
     { name: "account", label: "Account" },
     { name: "map", label: "Maps" },
@@ -82,41 +87,55 @@ export default function DashboardLayout() {
         </div>
         <nav className="flex-grow">
           <ul className="p-2 space-y-2">
-            {tabs.map((tab) => (
-              <li key={tab.name}>
-                <NavLink
-                  onClick={toggleSidebar}
-                  to={`${tab.name}`}
-                  className={({ isActive }) =>
-                    `w-full flex items-center justify-start p-2 rounded ${
-                      isActive ? "bg-zinc-100 text-black" : "text-black"
-                    }`
-                  }
-                >
-                  {tab.name === "product" && MemoizedPackageIcon}
-                  {tab.name === "home" && MemoizedHomeIcon}
-                  {tab.name === "route" && (
-                    <Waypoints className="mr-2 h-4 w-4" />
-                  )}
-                  {tab.name === "stop" && (
-                    <TramFront className="mr-2 h-4 w-4" />
-                  )}
-                  {tab.name === "user" && (
-                    <UserRoundCog className="mr-2 h-4 w-4" />
-                  )}
-                  {tab.name === "profile" && <User className="mr-2 h-4 w-4" />}
-                  {tab.name === "account" && <Lock className="mr-2 h-4 w-4" />}
-                  {tab.name === "map" && <Compass className="mr-2 h-4 w-4" />}
-                  {tab.name === "notifications" && (
-                    <Bell className="mr-2 h-4 w-4" />
-                  )}
-                  {tab.name === "appearance" && (
-                    <Palette className="mr-2 h-4 w-4" />
-                  )}
-                  {tab.label}
-                </NavLink>
-              </li>
-            ))}
+            {tabs.map((tab) => {
+              // hide route and stop if the user is a super-admin
+              if (
+                user?.role === "super-admin" &&
+                (tab.name === "route" || tab.name === "stop")
+              ) {
+                return null;
+              }
+
+              return (
+                <li key={tab.name}>
+                  <NavLink
+                    onClick={toggleSidebar}
+                    to={`${tab.name}`}
+                    className={({ isActive }) =>
+                      `w-full flex items-center justify-start p-2 rounded ${
+                        isActive ? "bg-zinc-100 text-black" : "text-black"
+                      }`
+                    }
+                  >
+                    {tab.name === "product" && MemoizedPackageIcon}
+                    {tab.name === "home" && MemoizedHomeIcon}
+                    {tab.name === "stop" && (
+                      <TramFront className="mr-2 h-4 w-4" />
+                    )}
+                    {tab.name === "route" && (
+                      <Waypoints className="mr-2 h-4 w-4" />
+                    )}
+                    {tab.name === "user" && (
+                      <UserRoundCog className="mr-2 h-4 w-4" />
+                    )}
+                    {tab.name === "profile" && (
+                      <User className="mr-2 h-4 w-4" />
+                    )}
+                    {tab.name === "account" && (
+                      <Lock className="mr-2 h-4 w-4" />
+                    )}
+                    {tab.name === "map" && <Compass className="mr-2 h-4 w-4" />}
+                    {tab.name === "notifications" && (
+                      <Bell className="mr-2 h-4 w-4" />
+                    )}
+                    {tab.name === "appearance" && (
+                      <Palette className="mr-2 h-4 w-4" />
+                    )}
+                    {tab.label}
+                  </NavLink>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </aside>
