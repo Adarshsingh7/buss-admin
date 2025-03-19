@@ -6,6 +6,7 @@ interface UserType {
   photo: string;
   route: string | null;
   stop: string | null;
+  school: string | null;
   role: "student" | "driver" | "admin" | "super-admin";
   password: string;
   passwordConfirm?: string; // Made optional to handle the case after validation

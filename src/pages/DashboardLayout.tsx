@@ -14,6 +14,7 @@ import {
   Waypoints,
   TramFront,
   UserRoundCog,
+  Landmark,
 } from "lucide-react";
 import { Outlet, NavLink } from "react-router-dom";
 import { WrapperDelete } from "@/components/WrapperDelete";
@@ -41,10 +42,10 @@ export default function DashboardLayout() {
   });
   useQuery({
     queryKey: ["route"],
-    queryFn: () => route.getAllRoutes({ user: user?._id || "" }),
+    queryFn: () => route.getAllRoutes({ school: user?.school || "" }),
   });
   useQuery({
-    queryKey: ["school"],
+    queryKey: ["schools"],
     queryFn: () =>
       schoolService.getAllSchools(
         user?.role === "super-admin" ? {} : { user: user?._id || "" },
@@ -114,6 +115,9 @@ export default function DashboardLayout() {
                     )}
                     {tab.name === "route" && (
                       <Waypoints className="mr-2 h-4 w-4" />
+                    )}
+                    {tab.name === "school" && (
+                      <Landmark className="mr-2 h-4 w-4" />
                     )}
                     {tab.name === "user" && (
                       <UserRoundCog className="mr-2 h-4 w-4" />

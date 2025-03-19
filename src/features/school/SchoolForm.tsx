@@ -43,7 +43,9 @@ export function SchoolForm({ initialData, onSubmit }: SchoolFormProps) {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle>{initialData ? "Edit Stop" : "Create New Stop"}</CardTitle>
+        <CardTitle>
+          {initialData ? "Edit School" : "Create New School"}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -133,7 +135,7 @@ export function SchoolForm({ initialData, onSubmit }: SchoolFormProps) {
             </div>
           </div>
           <Button type="submit" className="w-full">
-            {initialData ? "Update Stop" : "Create Stop"}
+            {initialData ? "Update School" : "Create School"}
           </Button>
         </form>
       </CardContent>

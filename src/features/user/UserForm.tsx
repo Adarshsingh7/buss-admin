@@ -1,4 +1,4 @@
-import { RouteType, StopType, UserType } from "@/types";
+import { RouteType, SchoolType, StopType, UserType } from "@/types";
 
 interface UserFormTypes {
   defaultValues: UserType | null;
@@ -37,6 +37,8 @@ export function UserForm({ defaultValues, onSubmit }: UserFormTypes) {
   const isLoading = false;
   const { data: routes } = useQuery<RouteType[]>({ queryKey: ["route"] });
   const { data: stops } = useQuery<StopType[]>({ queryKey: ["stop"] });
+  const { data: user } = useQuery<UserType>({ queryKey: ["auth"] });
+  const { data: schools } = useQuery<SchoolType[]>({ queryKey: ["school"] });
   const isUpdateMode = Boolean(defaultValues);
 
   const form = useForm<UserType>({
@@ -45,8 +47,8 @@ export function UserForm({ defaultValues, onSubmit }: UserFormTypes) {
       email: "",
       phone: "",
       role: undefined,
-      route: "",
-      stop: "",
+      route: null,
+      stop: null,
       password: undefined,
       passwordConfirm: undefined,
       ...defaultValues,
@@ -158,6 +160,9 @@ export function UserForm({ defaultValues, onSubmit }: UserFormTypes) {
                       <SelectContent>
                         <SelectItem value="student">Student</SelectItem>
                         <SelectItem value="driver">Driver</SelectItem>
+                        {user?.role === "super-admin" && (
+                          <SelectItem value="admin">Admin</SelectItem>
+                        )}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -167,7 +172,43 @@ export function UserForm({ defaultValues, onSubmit }: UserFormTypes) {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              {routes?.length && (
+              {user?.role === "super-admin" && (
+                <FormField
+                  control={form.control}
+                  name="school"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>School</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={
+                          schools?.find(
+                            (school) => school._id === defaultValues?.school,
+                          )?._id ?? ""
+                        }
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a role" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {schools?.map((school) => (
+                            <SelectItem key={school._id} value={school._id}>
+                              {school.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              {routes?.length === 0 && (
                 <FormField
                   control={form.control}
                   name="route"
