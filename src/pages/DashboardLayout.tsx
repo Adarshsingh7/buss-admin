@@ -34,11 +34,14 @@ export default function DashboardLayout() {
   const { data: user } = useQuery<UserType>({ queryKey: ["auth"] });
   useQuery({
     queryKey: ["stop"],
-    queryFn: () => stop.getAllStops(user?._id || ""),
+    queryFn: () => stop.getAllStops(user?.school || ""),
   });
   useQuery({
     queryKey: ["user"],
-    queryFn: () => userService.getAllUsers(),
+    queryFn: () =>
+      userService.getAllUsers(
+        user?.role === "admin" ? { school: user?.school || "" } : {},
+      ),
   });
   useQuery({
     queryKey: ["route"],

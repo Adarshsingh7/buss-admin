@@ -3,11 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 // import { MapPin } from 'lucide-react'
-import { SchoolType, StopType } from "@/types";
+import { StopType } from "@/types";
 import { CustomDialog } from "@/components/CustomDialog";
 import InteractiveMap from "@/pages/InteractiveMap";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
 
 interface StopFormProps {
   initialData?: StopType | null;
@@ -15,7 +14,6 @@ interface StopFormProps {
 }
 
 export function StopForm({ initialData, onSubmit }: StopFormProps) {
-  const { data: schools } = useQuery<SchoolType>({ queryKey: ["schools"] });
   const [isFetching, setIsFetching] = useState(false);
   const [formData, setFormData] = useState<StopType>(
     initialData || {
@@ -38,7 +36,6 @@ export function StopForm({ initialData, onSubmit }: StopFormProps) {
       address: body.address,
       latitude: body.latitude,
       longitude: body.longitude,
-      school: schools?._id || "",
     });
     setIsFetching(false);
   }

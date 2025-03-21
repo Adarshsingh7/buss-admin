@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDialog } from "@/context/DialogContext";
-import { RouteType } from "@/types";
+import { RouteType, SchoolType } from "@/types";
 import { CustomDialog } from "@/components/CustomDialog";
 import RichTable from "@/components/RichTable";
 import { RouteForm } from "@/features/route/RouteForm";
@@ -12,6 +12,7 @@ const RouteManagement: FC = () => {
   const { openDeleteDialog } = useDialog();
 
   const { data, isLoading } = useQuery<RouteType[]>({ queryKey: ["route"] });
+  const { data: schools } = useQuery<SchoolType>({ queryKey: ["schools"] });
 
   const { createRoute } = useCreateRoute();
   const { updateRoute } = useUpdateRoute();
@@ -49,11 +50,10 @@ const RouteManagement: FC = () => {
 
   // final submit function for the form
   const handleSubmit = (body: RouteType) => {
-    console.log(body);
     if (body._id) {
       updateRoute(body);
     } else {
-      createRoute(body);
+      createRoute({ ...body, school: schools?._id || "" });
     }
     setEditDialogOpen(false);
     setActiveEditElement(null);

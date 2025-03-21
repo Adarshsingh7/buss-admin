@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDialog } from "@/context/DialogContext";
-import { StopType } from "@/types";
+import { SchoolType, StopType } from "@/types";
 import { CustomDialog } from "@/components/CustomDialog";
 import RichTable from "@/components/RichTable";
 import { StopForm } from "./StopForm";
@@ -10,7 +10,7 @@ import { BackdropLoader } from "@/components/BackdropLoader";
 
 const StopManagement: FC = () => {
   const { openDeleteDialog } = useDialog();
-
+  const { data: schools } = useQuery<SchoolType>({ queryKey: ["schools"] });
   const { data, isLoading } = useQuery<StopType[]>({ queryKey: ["stop"] });
   const { createStop } = useCreateStop();
   const { updateStop } = useUpdateStop();
@@ -39,7 +39,7 @@ const StopManagement: FC = () => {
     if (body._id) {
       updateStop(body);
     } else {
-      createStop(body);
+      createStop({ ...body, school: schools?._id });
     }
     setEditDialogOpen(false);
   };
