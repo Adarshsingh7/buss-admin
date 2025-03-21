@@ -39,6 +39,7 @@ interface RouteType {
   stops: string[]; // Stops are now objects with a 'value' field
   status: "arrival" | "return";
   user?: string;
+  school: string;
 }
 
 interface StopType {
@@ -47,6 +48,7 @@ interface StopType {
   latitude: number;
   longitude: number;
   address: string;
+  school?: string;
   user?: string;
 }
 

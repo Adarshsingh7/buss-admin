@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDialog } from "@/context/DialogContext";
-import { SchoolType } from "@/types";
+import { SchoolType, UserType } from "@/types";
 import { CustomDialog } from "@/components/CustomDialog";
 import RichTable from "@/components/RichTable";
 import { SchoolForm } from "./SchoolForm";
@@ -11,11 +11,16 @@ import {
   useUpdateSchool,
 } from "./school.hook";
 import { BackdropLoader } from "@/components/BackdropLoader";
-// import { School } from "lucide-react";
 
 const SchoolManagement: FC = () => {
   const { openDeleteDialog } = useDialog();
-  const { data, isLoading } = useQuery<SchoolType[]>({ queryKey: ["school"] });
+
+  const { data: schools, isLoading } = useQuery<SchoolType[]>({
+    queryKey: ["schools"],
+  });
+  const { data: currentUser, isLoading: isUserLoading } = useQuery<UserType>({
+    queryKey: ["auth"],
+  });
   const { createSchool } = useCreateSchool();
   const { updateSchool } = useUpdateSchool();
   const { deleteSchool } = useDeleteSchool();
@@ -25,11 +30,17 @@ const SchoolManagement: FC = () => {
     null,
   );
 
+  const handleDelete = (id: string) => {
+    deleteSchool(id);
+  };
+
   // used to edit the routes
   const handleEdit = (id: string) => {
     setEditDialogOpen(true);
-    const toBeEditedData = data?.find((el) => el._id === id);
-    if (toBeEditedData) setActiveEditElement(toBeEditedData);
+    const school = schools?.find((school) => school._id === id);
+    if (school) {
+      setActiveEditElement(school);
+    }
   };
 
   // used to add new routes
@@ -39,60 +50,63 @@ const SchoolManagement: FC = () => {
   };
 
   // final submit function for the form
-  const handleSubmit = (body: SchoolType) => {
+  const handleSubmit = (body: Partial<SchoolType>) => {
     if (body._id) {
-      updateSchool(body);
+      const data = updateSchool(body);
+      console.log(data);
     } else {
-      createSchool(body);
+      const data = createSchool(body);
+      console.log(data);
     }
-    setEditDialogOpen(false);
   };
 
-  const handleDelete = (id: string) => {
-    deleteSchool(id);
-  };
-
-  if (isLoading) return <BackdropLoader isLoading={isLoading} />;
-  if (!data) return null;
+  if (!schools)
+    return <BackdropLoader isLoading={isLoading || isUserLoading} />;
 
   // this is used to filter the record to show in the table
-  const filteredData = data.map((el, i) => ({
+
+  if (currentUser?.role === "admin") return null;
+
+  const filteredData = schools.map((el, i) => ({
     sno: i + 1,
     id: el._id,
-    address: el.address.slice(0, 40) + (el.address.length > 40 ? "..." : ""),
-    phone: el.phone,
-    email: el.email,
-    logo: el.logo,
-    schoolCode: el.schoolCode,
     name: el.name,
+    email: el.email,
+    schoolCode: el.schoolCode,
+    phone: el.phone,
+    logo: el.logo,
+    address: el.address,
+    isActive: el.isActive,
   }));
 
   const mapping = [
     { label: "SNO.", field: "sno" },
     { label: "Name", field: "name" },
     { label: "School Code", field: "schoolCode" },
-    // { label: "Phone", field: "phone" },
-    // { label: "Email", field: "email" },
-    { label: "Logo", field: "logo" },
-    { label: "Address", field: "address" },
+    { label: "Email", field: "email" },
+    { label: "Phone", field: "phone" },
   ];
 
   return (
     <div className="flex flex-col gap-10">
       <CustomDialog
-        width={30}
+        width={55}
         dialoagOpen={editDialogOpen}
         label="Edit Routes"
         onOpenChange={setEditDialogOpen}
       >
-        <SchoolForm initialData={activeEditElement} onSubmit={handleSubmit} />
+        <SchoolForm
+          defaultValues={activeEditElement}
+          onSubmit={handleSubmit}
+          isUpdateMode={true}
+        />
       </CustomDialog>
       <RichTable
         onAddRecord={handleAddRecord}
         initialData={filteredData}
         mapping={mapping}
         onDelete={(id) => openDeleteDialog(() => handleDelete(id))}
-        label="School List"
+        label="School  List"
         onEdit={handleEdit}
       />
     </div>

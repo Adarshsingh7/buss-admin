@@ -14,7 +14,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
 import { useGetUnAllocatedStops } from "@/utils/useGetUnAllocatedStops";
 import { useQuery } from "@tanstack/react-query";
-import { RouteType, StopType } from "@/types";
+import { RouteType, SchoolType, StopType } from "@/types";
 
 interface RouteFormProps {
   initialData?: RouteType;
@@ -24,6 +24,7 @@ interface RouteFormProps {
 export function RouteForm({ initialData, onSubmit }: RouteFormProps) {
   const { remainingStops } = useGetUnAllocatedStops();
   const { data: stops } = useQuery<StopType[]>({ queryKey: ["stop"] });
+  const { data: schools } = useQuery<SchoolType>({ queryKey: ["schools"] });
 
   const [routeNumber, setRouteNumber] = useState<number>(
     initialData?.routeNumber || 0,
@@ -78,6 +79,7 @@ export function RouteForm({ initialData, onSubmit }: RouteFormProps) {
       routeName,
       stops: totalStops,
       status,
+      school: schools?._id || " ",
     };
     onSubmit(data);
   };

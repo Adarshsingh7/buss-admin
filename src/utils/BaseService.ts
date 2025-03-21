@@ -16,8 +16,6 @@ class BaseService<T> {
   // Fetch all resources
   async getAll(queryParams: Record<string, any> = {}): Promise<T[]> {
     const queryString = new URLSearchParams(queryParams).toString();
-    console.log(queryString);
-    console.log(queryParams);
     const response: AxiosResponse<{ data: T[] }> = await this.api.get(
       `?${queryString}`,
     );

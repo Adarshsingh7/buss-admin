@@ -1,143 +1,179 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { SchoolType } from "@/types";
-import { toast } from "sonner";
 
-interface SchoolFormProps {
-  initialData?: SchoolType | null;
+interface SchoolFormTypes {
+  defaultValues: SchoolType | null;
+  isUpdateMode: boolean;
   onSubmit: (data: SchoolType) => void;
 }
 
-export function SchoolForm({ initialData, onSubmit }: SchoolFormProps) {
-  const [formData, setFormData] = useState<SchoolType>(
-    initialData || {
-      _id: "",
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+export function SchoolForm({ defaultValues, onSubmit }: SchoolFormTypes) {
+  const isLoading = false;
+  const isUpdateMode = Boolean(defaultValues);
+
+  const form = useForm<SchoolType>({
+    defaultValues: {
       name: "",
-      address: "",
-      phone: "",
       email: "",
+      phone: "",
+      address: "",
       logo: "",
       schoolCode: "",
       isActive: true,
+      ...defaultValues,
     },
-  );
+  });
 
-  function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    onSubmit(formData);
-    toast.success(
-      `The Stop ${formData._id ? "Updated" : "Created"} successfully`,
-    );
-  }
-
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  async function handleSubmit(data: SchoolType) {
+    onSubmit(data);
   }
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>
-          {initialData ? "Edit School" : "Create New School"}
+          {isUpdateMode ? "Update School" : "Create School"}
         </CardTitle>
+        <CardDescription>
+          {isUpdateMode
+            ? "Update School information using the form below."
+            : "Enter School details to create a new School."}
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
-            <div className="mt-1">
-              <Input
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
+            <div className="grid grid-cols-1 gap-4">
+              <FormField
+                control={form.control}
                 name="name"
-                autoComplete="off"
-                placeholder="Enter Name"
-                value={formData.name}
-                onChange={handleChange}
+                rules={{ required: "Name is required" }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Address
-            </label>
-            <div className="mt-1">
-              <Input
-                name="address"
-                autoComplete="off"
-                placeholder="Enter address"
-                value={formData.address}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Phone
-            </label>
-            <div className="mt-1">
-              <Input
-                name="phone"
-                autoComplete="off"
-                placeholder="Enter phone number"
-                value={formData.phone}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <div className="mt-1">
-              <Input
-                type="email"
+              <FormField
+                control={form.control}
                 name="email"
-                autoComplete="off"
-                placeholder="Enter email"
-                value={formData.email}
-                onChange={handleChange}
+                rules={{
+                  required: "Email is required",
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Please enter a valid email address",
+                  },
+                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="john@example.com"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Logo URL
-            </label>
-            <div className="mt-1">
-              <Input
+              <FormField
+                control={form.control}
+                name="phone"
+                rules={{
+                  required: "Phone number is required",
+                  minLength: {
+                    value: 10,
+                    message: "Phone number must be at least 10 digits",
+                  },
+                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="1234567890" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="logo"
-                autoComplete="off"
-                placeholder="Enter logo URL"
-                value={formData.logo}
-                onChange={handleChange}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Logo</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              School Code
-            </label>
-            <div className="mt-1">
-              <Input
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="schoolCode"
-                autoComplete="off"
-                placeholder="Enter school code"
-                value={formData.schoolCode}
-                onChange={handleChange}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>School Code</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
-          </div>
-          <Button type="submit" className="w-full">
-            {initialData ? "Update School" : "Create School"}
-          </Button>
-        </form>
+
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading
+                ? "Loading..."
+                : isUpdateMode
+                  ? "Update School"
+                  : "Create School"}
+            </Button>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );

@@ -38,7 +38,7 @@ export function UserForm({ defaultValues, onSubmit }: UserFormTypes) {
   const { data: routes } = useQuery<RouteType[]>({ queryKey: ["route"] });
   const { data: stops } = useQuery<StopType[]>({ queryKey: ["stop"] });
   const { data: user } = useQuery<UserType>({ queryKey: ["auth"] });
-  const { data: schools } = useQuery<SchoolType[]>({ queryKey: ["school"] });
+  const { data: schools } = useQuery<SchoolType[]>({ queryKey: ["schools"] });
   const isUpdateMode = Boolean(defaultValues);
 
   const form = useForm<UserType>({

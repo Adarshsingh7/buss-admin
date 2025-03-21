@@ -46,13 +46,15 @@ export default function DashboardLayout() {
   });
   useQuery({
     queryKey: ["schools"],
-    queryFn: () =>
-      schoolService.getAllSchools(
-        user?.role === "super-admin" ? {} : { user: user?._id || "" },
-      ),
+    queryFn: async () => {
+      if (!user) return null;
+      if (user.role === "super-admin") return schoolService.getAllSchools();
+      if (user.role === "admin" && user.school)
+        return schoolService.getSchool(user.school);
+      return null;
+    },
   });
 
-  console.log(user);
   const tabs = [
     { name: "home", label: "Home" },
     { name: "route", label: "Routes" },

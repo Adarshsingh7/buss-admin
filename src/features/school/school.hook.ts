@@ -9,8 +9,8 @@ const useCreateSchool = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: (body: Partial<SchoolType>) => schoolService.createSchool(body),
     onSuccess: () => {
-      toast.success("User created successfully");
-      queryClient.invalidateQueries({ queryKey: ["school"] });
+      toast.success("School created successfully");
+      queryClient.invalidateQueries({ queryKey: ["schools"] });
     },
     onError: (err: AxiosError) => {
       toast.error(
@@ -30,7 +30,7 @@ const useUpdateSchool = () => {
       schoolService.updateSchool(body._id || "", body),
     onSuccess: () => {
       toast.success("School update successfully");
-      queryClient.invalidateQueries({ queryKey: ["school"] });
+      queryClient.invalidateQueries({ queryKey: ["schools"] });
     },
     onError: (err: AxiosError) => {
       toast.error(
@@ -48,7 +48,7 @@ const useDeleteSchool = () => {
     mutationFn: (id: string) => schoolService.deleteSchool(id),
     onSuccess: () => {
       toast.success("School deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["school"] });
+      queryClient.invalidateQueries({ queryKey: ["schools"] });
     },
     onError: (err: AxiosError) => {
       toast.error(
